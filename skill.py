@@ -6,6 +6,9 @@ import feedparser
 FLASH_FEED = "http://www.swcombine.com/feeds/gns_flashnews.xml"
 GNS_FEED = "http://www.swcombine.com/feeds/gns.xml"
 SIM_FEED = "http://www.swcombine.com/feeds/news.xml"
+DEFAULT_FLASH = 10
+DEFAULT_GNS = 3
+DEFAULT_SIM = 3
 
 
 def generate_help_response(session):

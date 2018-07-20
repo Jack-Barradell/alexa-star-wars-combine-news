@@ -66,7 +66,10 @@ def on_intent(intent_request, session):
     if intent_name == "AMAZON.HelpIntent":
         return generate_help_response(session)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return generate_end_request(session)
+        if intent["slots"]["number"].get("value"):
+            return generate_flash_response(session, intent["slots"]["number"]["value"])
+        else:
+            return generate_end_request(session)
     elif intent_name == "flash":
         return generate_flash_response(session)
     else:

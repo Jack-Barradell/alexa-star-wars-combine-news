@@ -1,10 +1,16 @@
 # Needed if want to use print
 from __future__ import print_function
+import feedparser
+
+
+FLASH_FEED = "http://www.swcombine.com/feeds/gns_flashnews.xml"
+GNS_FEED = "http://www.swcombine.com/feeds/gns.xml"
+SIM_FEED = "http://www.swcombine.com/feeds/news.xml"
 
 
 def generate_help_response(session):
     session = {}
-    title = "Needs help"
+    title = "SWC News"
     output = "Some templated help"
     reprompt = "reprompted template"
     end_session = False
@@ -14,9 +20,9 @@ def generate_help_response(session):
 
 def generate_launch_response(session):
     session = {}
-    title = "Test Title"
-    output = "Welcome to the template"
-    reprompt = "Did you hear? You are in the template"
+    title = "SWC News"
+    output = "Welcome to swc news, would you like sim, g n s, or flash news?"
+    reprompt = "Would you like sim, g n s, or flash news?"
     end_session = False
     response = generate_response(session, title, output, reprompt, end_session)
     return response

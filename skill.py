@@ -27,7 +27,7 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
         summary = re.sub('<[^<]+?>', '', item["summary"])
 
         output += "{}. ".format(title)
-        output += "{}.. ".format(summary)
+        output += "{}... ".format(summary)
 
     reprompt = "reprompted template"
     end_session = False
@@ -66,12 +66,12 @@ def on_intent(intent_request, session):
     if intent_name == "AMAZON.HelpIntent":
         return generate_help_response(session)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        if intent["slots"]["number"].get("value"):
-            return generate_flash_response(session, intent["slots"]["number"]["value"])
-        else:
-            return generate_end_request(session)
+        return generate_end_request(session)
     elif intent_name == "flash":
-        return generate_flash_response(session)
+        if intent['slots']['number'].get('value'):
+            return generate_flash_response(session, int(intent['slots']['number'].get('value')))
+        else:
+            return generate_flash_response(session)
     else:
         raise ValueError("Invalid intent")
 

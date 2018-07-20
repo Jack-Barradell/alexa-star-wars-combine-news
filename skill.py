@@ -1,14 +1,38 @@
 # Needed if want to use print
 from __future__ import print_function
 import feedparser
-
+import re
 
 FLASH_FEED = "http://www.swcombine.com/feeds/gns_flashnews.xml"
 GNS_FEED = "http://www.swcombine.com/feeds/gns.xml"
 SIM_FEED = "http://www.swcombine.com/feeds/news.xml"
-DEFAULT_FLASH = 10
+DEFAULT_FLASH = 5
 DEFAULT_GNS = 3
 DEFAULT_SIM = 3
+
+
+def generate_flash_response(session, count = DEFAULT_FLASH):
+    session = {}
+    title = "SWC News"
+
+    flash_feed = feedparser.parse(FLASH_FEED)
+
+    output = "Latest flash news. "
+
+    for i,item in enumerate(flash_feed["items"]):
+        if i == count:
+            break
+
+        title = re.sub('<[^<]+?>', '', item["title"])
+        summary = re.sub('<[^<]+?>', '', item["summary"])
+
+        output += "{}. ".format(title)
+        output += "{}.. ".format(summary)
+
+    reprompt = "reprompted template"
+    end_session = False
+    response = generate_response(session, title, output, reprompt, end_session)
+    return response
 
 
 def generate_help_response(session):
@@ -43,6 +67,8 @@ def on_intent(intent_request, session):
         return generate_help_response(session)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return generate_end_request(session)
+    elif intent_name == "flash":
+        return generate_flash_response(session)
     else:
         raise ValueError("Invalid intent")
 

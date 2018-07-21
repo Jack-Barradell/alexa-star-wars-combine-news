@@ -18,6 +18,9 @@ def generate_gns_title_response(session, count = DEFAULT_GNS):
 
     gns_feed = feedparser.parse(GNS_FEED)
 
+    if not gns_feed.get("items"):
+
+
     for i,item in enumerate(gns_feed["items"]):
         if i == count:
             break
@@ -29,7 +32,7 @@ def generate_gns_title_response(session, count = DEFAULT_GNS):
         output += " on behalf of {}... \n".format(item["faction"])
 
 
-    reprompt = "reprompted template"
+    reprompt = "Would you like sim, g n s, or flash news?"
     end_session = False
     response = generate_response(session, title, output, reprompt, end_session)
     return response
@@ -53,7 +56,7 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
         output += "{}. ".format(title)
         output += "{}... \n".format(summary)
 
-    reprompt = "reprompted template"
+    reprompt = "Would you like sim, g n s, or flash news?"
     end_session = False
     response = generate_response(session, title, output, reprompt, end_session)
     return response
@@ -63,7 +66,7 @@ def generate_help_response(session):
     session = {}
     title = "SWC News"
     output = "Some templated help"
-    reprompt = "reprompted template"
+    reprompt = "Would you like sim, g n s, or flash news?"
     end_session = False
     response = generate_response(session, title, output, reprompt, end_session)
     return response

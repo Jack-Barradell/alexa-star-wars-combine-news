@@ -11,13 +11,37 @@ DEFAULT_GNS = 3
 DEFAULT_SIM = 3
 
 
+def generate_gns_title_response(session, count = DEFAULT_GNS):
+    session = {}
+    title = "SWC News"
+    output = "Latest g n s news. \n"
+
+    gns_feed = feedparser.parse(GNS_FEED)
+
+    for i,item in enumerate(gns_feed["items"]):
+        if i == count:
+            break
+
+        title = re.sub('<[^<]+?>', '', item["title"])
+
+        output += "{}. ".format(title)
+        output += " published by {}. ".format(item["author"])
+        output += " on behalf of {}... \n".format(item["faction"])
+
+
+    reprompt = "reprompted template"
+    end_session = False
+    response = generate_response(session, title, output, reprompt, end_session)
+    return response
+
+
 def generate_flash_response(session, count = DEFAULT_FLASH):
     session = {}
     title = "SWC News"
 
     flash_feed = feedparser.parse(FLASH_FEED)
 
-    output = "Latest flash news. "
+    output = "Latest flash news. \n"
 
     for i,item in enumerate(flash_feed["items"]):
         if i == count:
@@ -27,7 +51,7 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
         summary = re.sub('<[^<]+?>', '', item["summary"])
 
         output += "{}. ".format(title)
-        output += "{}... ".format(summary)
+        output += "{}... \n".format(summary)
 
     reprompt = "reprompted template"
     end_session = False
@@ -72,6 +96,11 @@ def on_intent(intent_request, session):
             return generate_flash_response(session, int(intent['slots']['number'].get('value')))
         else:
             return generate_flash_response(session)
+    elif intent_name == "gns":
+        if intent['slots']['number'].get('value'):
+            return generate_gns_title_response(session, int(intent['slots']['number'].get('value')))
+        else:
+            return generate_gns_title_response(session)
     else:
         raise ValueError("Invalid intent")
 

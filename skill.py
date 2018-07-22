@@ -32,7 +32,7 @@ def generate_sim_title_response(session, count = DEFAULT_SIM):
         output += "Sorry, no sim news available... "
 
     reprompt = "Would you like sim, g n s, or flash news?"
-    end_session = False
+    end_session = True
     response = generate_response(session, title, output, reprompt, end_session)
     return response
 
@@ -59,7 +59,7 @@ def generate_gns_title_response(session, count = DEFAULT_GNS):
         output += "Sorry, no g n s news available... "
 
     reprompt = "Would you like sim, g n s, or flash news?"
-    end_session = False
+    end_session = True
     response = generate_response(session, title, output, reprompt, end_session)
     return response
 
@@ -90,7 +90,7 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
         output += "Sorry, no flash news available..."
 
     reprompt = "Would you like sim, g n s, or flash news?"
-    end_session = False
+    end_session = True
     response = generate_response(session, title, output, reprompt, end_session)
     return response
 
@@ -98,7 +98,7 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
 def generate_help_response(session):
     session = {}
     title = "SWC News"
-    output = "Some templated help"
+    output = "Ask me for the latest sim, g n s or flash news!"
     reprompt = "Would you like sim, g n s, or flash news?"
     end_session = False
     response = generate_response(session, title, output, reprompt, end_session)
@@ -116,7 +116,13 @@ def generate_launch_response(session):
 
 
 def generate_end_request(session):
-    pass
+    session = {}
+    title = "SWC News"
+    output = "Goodbye"
+    reprompt = "Goodbye"
+    end_session = True
+    response = generate_response(session, title, output, reprompt, end_session)
+    return response
 
 
 def on_intent(intent_request, session):

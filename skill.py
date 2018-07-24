@@ -26,6 +26,7 @@ def generate_sim_title_response(session, count = DEFAULT_SIM):
             item_title = re.sub('<[^<]+?>', '', item["title"])
 
             output += "{}. ".format(item_title)
+            output += "posted by {}. ".format(item["author"])
             output += ". . . \n"
 
     else:

@@ -130,7 +130,7 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
 
-    if intent_name == "AMAZON.HelpIntent":
+    if intent_name == "AMAZON.HelpIntent" or intent_name == "AMAZON.FallbackIntent":
         return generate_help_response(session)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
         return generate_end_request(session)
@@ -150,7 +150,7 @@ def on_intent(intent_request, session):
         else:
             return generate_sim_title_response(session) 
     else:
-        raise ValueError("Invalid intent")
+        return generate_help_response(session)
 
 
 def on_ended(end_request, session):

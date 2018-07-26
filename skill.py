@@ -3,9 +3,12 @@ from __future__ import print_function
 import feedparser
 import re
 
+# Sources for news
 FLASH_FEED = "http://www.swcombine.com/feeds/gns_flashnews.xml"
 GNS_FEED = "http://www.swcombine.com/feeds/gns.xml"
 SIM_FEED = "http://www.swcombine.com/feeds/news.xml"
+
+# Default news to pull
 DEFAULT_FLASH = 5
 DEFAULT_GNS = 3
 DEFAULT_SIM = 3
@@ -18,13 +21,18 @@ def generate_sim_title_response(session, count = DEFAULT_SIM):
 
     sim_feed = feedparser.parse(SIM_FEED)
 
+    # Verifies there is some news
     if sim_feed.get("items"):
         for i,item in enumerate(sim_feed["items"]):
+
+            # Limits the number of news items presented
             if i == count:
                 break
 
+            # Strip any tags from the title
             item_title = re.sub('<[^<]+?>', '', item["title"])
 
+            # Builds the response
             output += "{}. ".format(item_title)
             output += "posted by {}. ".format(item["author"])
             output += ". . . \n"
@@ -45,13 +53,18 @@ def generate_gns_title_response(session, count = DEFAULT_GNS):
 
     gns_feed = feedparser.parse(GNS_FEED)
 
+    # Verifies there is actually some news
     if gns_feed.get("items"):
         for i,item in enumerate(gns_feed["items"]):
+
+            # Limits the number of items fed
             if i == count:
                 break
 
+            # Strips any tags fro the title
             item_title = re.sub('<[^<]+?>', '', item["title"])
 
+            # Builds tthe response
             output += "{}. ".format(item_title)
             output += " published by {}. ".format(item["author"])
             output += " on behalf of {}. . . \n".format(item["faction"])
@@ -73,15 +86,21 @@ def generate_flash_response(session, count = DEFAULT_FLASH):
 
     output = "Latest flash news, starting with the newest. \n"
 
+    # Verifies theres is actually some news
     if flash_feed.get("items"):
         for i,item in enumerate(flash_feed["items"]):
+
+            # Limits the number of items 
             if i == count:
                 break
 
+            # Strips any tags from the news and title
             item_title = re.sub('<[^<]+?>', '', item["title"])
             summary = re.sub('<[^<]+?>', '', item["summary"])
 
             output += "{}. ".format(item_title)
+
+            # Blocks certain flash news where the title and content are the same
             if not item_title == summary:
                 output += "{}".format(summary)
 
@@ -130,6 +149,7 @@ def on_intent(intent_request, session):
     intent = intent_request['intent']
     intent_name = intent_request['intent']['name']
 
+    # Routes the intents, splitting on intents where there can be a slotted number
     if intent_name == "AMAZON.HelpIntent" or intent_name == "AMAZON.FallbackIntent":
         return generate_help_response(session)
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
